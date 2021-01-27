@@ -1,5 +1,5 @@
 # target architecture
-ARG BASE_ARCH=amd64
+ARG BASE_ARCH=${ARCH:-amd64}
 FROM ${BASE_ARCH}/debian:buster-slim
 
 # Maintainer
