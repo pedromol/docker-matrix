@@ -17,7 +17,7 @@ jobs:
         id: prep
         run: |
           DOCKER_IMAGE=avhost/${GITHUB_REPOSITORY#*/}
-          VERSION=latest
+          VERSION=test
           SHORTREF=${GITHUB_SHA::8}
 
           # If this is git tag, use the tag name as a docker tag
@@ -59,6 +59,6 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/ppc64le
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.prep.outputs.tags }}
