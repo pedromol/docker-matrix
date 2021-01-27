@@ -30,6 +30,7 @@ RUN set -ex \
     && export ARCH=`dpkg --print-architecture` \
     && export MARCH=`uname -m` \
     && mkdir /uploads \
+    && mkdir /data \
     && export DEBIAN_FRONTEND=noninteractive \
     && mkdir -p /var/cache/apt/archives \
     && touch /var/cache/apt/archives/lock \
