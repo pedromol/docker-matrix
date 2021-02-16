@@ -61,7 +61,6 @@ RUN set -ex \
     " \
     && apt-get install -y --no-install-recommends \
         $buildDeps \
-
         bash \
         coreutils \
         coturn \
@@ -103,7 +102,9 @@ RUN set -ex \
     apt-get autoremove -y $buildDeps ; \
     apt-get autoremove -y ;\
     ln -s /usr/lib/${MARCH}-linux-gnu/libjemalloc.so.2 /usr/lib/libjemalloc.so.2; \
-    rm -rf /var/lib/apt/* /var/cache/apt/*
+    rm -rf /var/lib/apt/* /var/cache/apt/* \
+    rm -rf /root/.cargo \
+    rm -rf /root/.cache 
 
 USER matrix
 
