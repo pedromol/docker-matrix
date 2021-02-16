@@ -17,7 +17,7 @@ VOLUME ["/data"]
 # Git branch to build from
 ARG BV_SYN=release-v1.26.0
 ARG BV_TUR=master
-ARG TAG_SYN=v1.26.0
+ARG TAG_SYN=v1.27.0
 
 
 # user configuration
