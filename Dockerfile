@@ -15,9 +15,9 @@ EXPOSE 8448
 VOLUME ["/data"]
 
 # Git branch to build from
-ARG BV_SYN=release-v1.31.0
+ARG BV_SYN=release-v1.32.0
 ARG BV_TUR=master
-ARG TAG_SYN=v1.31.0
+ARG TAG_SYN=v1.32.0
 
 
 # user configuration
