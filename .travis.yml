@@ -84,12 +84,12 @@ jobs:
       - export REPO="avhost/docker-matrix"
     script:
     - echo "===== Create Manifest ===="
+    - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
     - docker pull $REPO:amd64-$TRAVIS_BRANCH
     - docker pull $REPO:ppc64le-$TRAVIS_BRANCH
     - docker pull $REPO:arm64-$TRAVIS_BRANCH
     - export DOCKER_CLI_EXPERIMENTAL=enabled
     - docker manifest create $REPO:$TRAVIS_BRANCH $REPO\:amd64-$TRAVIS_BRANCH $REPO\:ppc64le-$TRAVIS_BRANCH $REPO\:arm64-$TRAVIS_BRANCH
     - docker manifest create $REPO:latest $REPO\:amd64-$TRAVIS_BRANCH $REPO\:ppc64le-$TRAVIS_BRANCH $REPO\:arm64-$TRAVIS_BRANCH
-    - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
     - docker manifest push $REPO:$TRAVIS_BRANCH
     - docker manifest push $REPO:latest
