@@ -52,7 +52,7 @@ RUN set -ex \
         libssl-dev \
         libtool \
         libxml2-dev \
-        libxslt1-dev \        
+        libxslt1-dev \
         make \
         zlib1g-dev \
         python3-dev \
@@ -80,7 +80,7 @@ RUN set -ex \
     pip3 install --upgrade wheel ;\
     pip3 install --upgrade psycopg2;\
     pip3 install --upgrade python-ldap ;\
-    pip3 install --upgrade twisted==20.3.0 ;\
+    pip3 install --upgrade twisted==21.2.0 ;\
     pip3 install --upgrade redis ;\
     pip3 install -e "git+https://github.com/t2bot/synapse-simple-antispam#egg=synapse-simple-antispam" ;\
     pip3 install -e "git+https://github.com/matrix-org/mjolnir.git#egg=mjolnir&subdirectory=synapse_antispam" ;\
@@ -104,7 +104,7 @@ RUN set -ex \
     ln -s /usr/lib/${MARCH}-linux-gnu/libjemalloc.so.2 /usr/lib/libjemalloc.so.2; \
     rm -rf /var/lib/apt/* /var/cache/apt/* \
     rm -rf /root/.cargo \
-    rm -rf /root/.cache 
+    rm -rf /root/.cache
 
 USER matrix
 
