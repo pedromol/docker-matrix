@@ -9,6 +9,8 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    container:
+      options: -v /__w/docker-matrix/docker-matrix:/data:rw
     steps:
       - name: Checkout
         uses: actions/checkout@v2
