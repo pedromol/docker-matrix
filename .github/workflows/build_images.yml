@@ -9,8 +9,6 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    container:
-      options: -v /__w/docker-matrix/docker-matrix:/data:rw
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -38,6 +36,8 @@ jobs:
           # Set output parameters.
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
+
+          mkdir /data
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
