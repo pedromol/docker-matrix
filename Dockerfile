@@ -14,9 +14,9 @@ CMD ["autostart"]
 EXPOSE 8448
 
 # Git branch to build from
-ARG BV_SYN=release-v1.38
+ARG BV_SYN=release-v1.39
 ARG BV_TUR=master
-ARG TAG_SYN=v1.38.1
+ARG TAG_SYN=v1.39.0
 
 
 # user configuration
