@@ -16,7 +16,8 @@ EXPOSE 8448
 # Git branch to build from
 ARG BV_SYN=release-v1.45
 ARG BV_TUR=master
-ARG TAG_SYN=v1.45.0
+ARG TAG_SYN=v1.45.1
+
 
 
 # user configuration
@@ -76,15 +77,16 @@ RUN set -ex \
         sqlite \
         zlib1g \
     ; \
+    pip3 install --upgrade pip ;\
     pip3 install --upgrade wheel ;\
     pip3 install --upgrade psycopg2;\
     pip3 install --upgrade python-ldap ;\
-    pip3 install --upgrade twisted==21.2.0 ;\
+    pip3 install --upgrade twisted ;\
     pip3 install --upgrade redis ;\
+    pip3 install --upgrade cryptography ;\
     pip3 install -e "git+https://github.com/t2bot/synapse-simple-antispam#egg=synapse-simple-antispam" ;\
     pip3 install -e "git+https://github.com/matrix-org/mjolnir.git#egg=mjolnir&subdirectory=synapse_antispam" ;\
-    pip3 install --upgrade lxml \
-    ; \
+    pip3 install --upgrade lxml  ; \
     groupadd -r -g $MATRIX_GID matrix \
     && mkdir /data \
     && useradd -r -d /data -M -u $MATRIX_UID -g matrix matrix \
