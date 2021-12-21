@@ -1,6 +1,6 @@
 # target architecture
 ARG BASE_ARCH=${ARCH:-amd64}
-FROM ${BASE_ARCH}/debian:buster-slim
+FROM ${BASE_ARCH}/debian:bookworm-slim
 
 # Maintainer
 MAINTAINER Andreas Peters <support@aventer.biz>
@@ -16,7 +16,7 @@ EXPOSE 8448
 # Git branch to build from
 ARG BV_SYN=release-v1.49
 ARG BV_TUR=master
-ARG TAG_SYN=v1.49.1
+ARG TAG_SYN=v1.49.2
 
 
 
@@ -64,28 +64,27 @@ RUN set -ex \
         bash \
         coreutils \
         coturn \
-        libffi6 \
         libjpeg62-turbo \
         libssl1.1 \
         libtool \
         libxml2 \
         libxslt1.1 \
         pwgen \
+        libffi8 \
+        sqlite3 \
         python3 \
         python3-pip \
         python3-jinja2 \
-        sqlite \
         zlib1g \
     ; \
     pip3 install --upgrade pip ;\
     pip3 install --upgrade wheel ;\
     pip3 install --upgrade psycopg2;\
+    pip3 install --upgrade setuptools ;\
     pip3 install --upgrade python-ldap ;\
     pip3 install --upgrade twisted ;\
     pip3 install --upgrade redis ;\
     pip3 install --upgrade cryptography ;\
-    pip3 install -e "git+https://github.com/t2bot/synapse-simple-antispam#egg=synapse-simple-antispam" ;\
-    pip3 install -e "git+https://github.com/matrix-org/mjolnir.git#egg=mjolnir&subdirectory=synapse_antispam" ;\
     pip3 install --upgrade lxml  ; \
     groupadd -r -g $MATRIX_GID matrix \
     && mkdir /data \
