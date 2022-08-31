@@ -1,6 +1,5 @@
 # target architecture
-ARG BASE_ARCH=${ARCH:-amd64}
-FROM ${BASE_ARCH}/debian:bookworm-slim
+FROM debian:bookworm-slim
 
 # Maintainer
 MAINTAINER Andreas Peters <support@aventer.biz>
@@ -14,9 +13,9 @@ CMD ["autostart"]
 EXPOSE 8448
 
 # Git branch to build from
-ARG BV_SYN=release-v1.64
+ARG BV_SYN=release-v1.66
 ARG BV_TUR=master
-ARG TAG_SYN=v1.65.0
+ARG TAG_SYN=v1.66.0
 
 
 
