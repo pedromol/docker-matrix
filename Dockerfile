@@ -13,9 +13,9 @@ CMD ["autostart"]
 EXPOSE 8448
 
 # Git branch to build from
-ARG BV_SYN=release-v1.66
+ARG BV_SYN=release-v1.67
 ARG BV_TUR=master
-ARG TAG_SYN=v1.66.0
+ARG TAG_SYN=v1.67.0
 
 
 
@@ -64,7 +64,7 @@ RUN set -ex \
         coreutils \
         coturn \
         libjpeg62-turbo \
-        libssl1.1 \
+        libssl3 \
         libtool \
         libxml2 \
         libxslt1.1 \
