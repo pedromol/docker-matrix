@@ -17,6 +17,8 @@ ARG BV_SYN=release-v1.70
 ARG BV_TUR=master
 ARG TAG_SYN=v1.70.1
 
+ENV COTURN_ENABLE=true
+
 
 
 # user configuration

@@ -75,7 +75,7 @@ The following ports are used in the container for the Matrix server. You can use
 `docker run` to configure this part (eg.: `-p 443:8448`):  
 `8008,8448 tcp`
 
-### Coturn server
+### Coturn server (deprecated)  
 
 If you only need STUN to work you  need the following ports:  
 `3478, 5349 udp/tcp`  
@@ -90,6 +90,8 @@ You may also have to set the external ip of the server in turnserver.conf which 
 In case you don't want to expose the whole port range on udp you can change the port range in turnserver.conf:  
 `min-port=XXXXX`  
 `max-port=XXXXX`  
+
+If you want to disable coturn, set the environment variable `COTURN_ENABLE="false".
 
 ## Version information
 
@@ -118,6 +120,7 @@ argument or look at the container via cat.
 * `LD_PRELOAD` This is set by default to use jemalloc as memory allocator, as 
   that has been shown to greatly reduce the memory useage of synapse. To use the default malloc
   the environmental variable has to be emptied, by adding `-e LD_PRELOAD` when running the container.
+* `COTURN_ENABLE` By default the turn server is enabled. To disable it, set these variable to "false".
 
 ## build specific arguments
 
