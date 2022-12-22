@@ -59,6 +59,9 @@ RUN set -ex \
         python3-dev \
         python3-setuptools \
         libpq-dev \
+        pkg-config \
+        libicu-dev \
+        g++ \
     " \
     && apt-get install -y --no-install-recommends \
         $buildDeps \
@@ -87,6 +90,7 @@ RUN set -ex \
     pip3 install --upgrade redis ;\
     pip3 install --upgrade cryptography ;\
     pip3 install --upgrade lxml  ; \
+    pip3 install --upgrade pyicu ; \
     groupadd -r -g $MATRIX_GID matrix \
     && mkdir /data \
     && useradd -r -d /data -M -u $MATRIX_UID -g matrix matrix \
