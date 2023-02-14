@@ -13,9 +13,9 @@ CMD ["autostart"]
 EXPOSE 8448
 
 # Git branch to build from
-ARG BV_SYN=release-v1.76
+ARG BV_SYN=release-v1.77
 ARG BV_TUR=master
-ARG TAG_SYN=v1.76.0
+ARG TAG_SYN=v1.77.0
 
 ENV COTURN_ENABLE=true
 
@@ -81,7 +81,6 @@ RUN set -ex \
         python3-jinja2 \
         zlib1g \
     ; \
-    pip3 install --upgrade pip ;\
     pip3 install --upgrade wheel ;\
     pip3 install --upgrade psycopg2;\
     pip3 install --upgrade setuptools ;\
