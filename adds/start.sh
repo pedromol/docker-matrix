@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#export PATH=/matrix/venv/bin:$PATH
+#. /matrix/venv/bin/activate
+
 OPTION="${1}"
 
 if [ ! -z "${ROOTPATH}" ]; then

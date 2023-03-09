@@ -1,25 +1,10 @@
 # target architecture
-FROM debian:bookworm-slim
-
-# Maintainer
-MAINTAINER Andreas Peters <support@aventer.biz>
-
-# install homerserver template
-COPY adds/start.sh /start.sh
-
-# startup configuration
-ENTRYPOINT ["/start.sh"]
-CMD ["autostart"]
-EXPOSE 8448
+FROM debian:bookworm-slim as builder
 
 # Git branch to build from
 ARG BV_SYN=release-v1.78
 ARG BV_TUR=master
 ARG TAG_SYN=v1.78.0
-
-ENV COTURN_ENABLE=true
-
-
 
 # user configuration
 ENV MATRIX_UID=991 MATRIX_GID=991
@@ -30,41 +15,18 @@ ARG REBUILD=1
 RUN set -ex \
     && export ARCH=`dpkg --print-architecture` \
     && export MARCH=`uname -m` \
-    && mkdir /uploads \
+    && touch /synapse.version \
     && export DEBIAN_FRONTEND=noninteractive \
     && mkdir -p /var/cache/apt/archives \
     && touch /var/cache/apt/archives/lock \
     && apt-get clean \
     && apt-get update -y -q --fix-missing\
-    && apt-get upgrade -y \
-    && buildDeps=" \
-        rustc \
-        cargo \
-        file \
-        gcc \
-        git \
-        libevent-dev \
-        libffi-dev \
-        libgnutls28-dev \
-        libjpeg62-turbo-dev \
-        libldap2-dev \
-        libsasl2-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        libtool \
-        libxml2-dev \
-        libxslt1-dev \
-        make \
-        zlib1g-dev \
-        python3-dev \
-        python3-setuptools \
-        libpq-dev \
-        pkg-config \
-        libicu-dev \
-        g++ \
-    " \
-    && apt-get install -y --no-install-recommends \
-        $buildDeps \
+    && apt-get upgrade -y 
+
+RUN apt-get install -y --no-install-recommends rustc cargo file gcc git libevent-dev libffi-dev libgnutls28-dev libjpeg62-turbo-dev libldap2-dev libsasl2-dev libsqlite3-dev \
+        libssl-dev libtool libxml2-dev libxslt1-dev make zlib1g-dev python3-dev python3-setuptools libpq-dev pkg-config libicu-dev g++
+
+RUN apt-get install -y --no-install-recommends \
         bash \
         coreutils \
         coturn \
@@ -79,9 +41,28 @@ RUN set -ex \
         python3 \
         python3-pip \
         python3-jinja2 \
-        zlib1g \
-    ; \
-    pip3 install --upgrade wheel ;\
+        python3-venv \
+        zlib1g 
+
+RUN groupadd -r -g $MATRIX_GID matrix 
+RUN useradd -r -d /matrix -m -u $MATRIX_UID -g matrix matrix 
+
+RUN git clone --branch $BV_SYN --depth 1 https://github.com/matrix-org/synapse.git /synapse
+RUN cd /synapse \
+    && git checkout -b tags/$TAG_SYN 
+
+RUN chown -R $MATRIX_UID:$MATRIX_GID /matrix
+RUN chown -R $MATRIX_UID:$MATRIX_GID /synapse
+RUN chown -R $MATRIX_UID:$MATRIX_GID /synapse.version
+
+USER matrix
+
+RUN python3 -m venv /matrix/venv
+RUN . /matrix/venv/bin/activate
+
+ENV PATH=/matrix/venv/bin:$PATH
+
+RUN pip3 install --upgrade wheel ;\
     pip3 install --upgrade psycopg2;\
     pip3 install --upgrade setuptools ;\
     pip3 install --upgrade python-ldap ;\
@@ -89,28 +70,71 @@ RUN set -ex \
     pip3 install --upgrade redis ;\
     pip3 install --upgrade cryptography ;\
     pip3 install --upgrade lxml  ; \
-    pip3 install --upgrade pyicu ; \
-    groupadd -r -g $MATRIX_GID matrix \
-    && mkdir /data \
-    && useradd -r -d /data -M -u $MATRIX_UID -g matrix matrix \
-    && chown -R $MATRIX_UID:$MATRIX_GID /data \
-    && chown -R $MATRIX_UID:$MATRIX_GID /uploads \
-    && git clone --branch $BV_SYN --depth 1 https://github.com/matrix-org/synapse.git \
-    && cd /synapse \
-    && git checkout -b tags/$TAG_SYN \
-    && pip3 install --upgrade .[all] \
+    pip3 install --upgrade pyicu 
+
+RUN cd /synapse \
+    && pip3 install --upgrade .[all] 
+
+RUN cd /synapse \
     && GIT_SYN=$(git ls-remote https://github.com/matrix-org/synapse $BV_SYN | cut -f 1) \
-    && echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version \
-    && cd / \
-    && rm -rf /synapse \
-    ; \
-    apt-get autoremove -y $buildDeps ; \
-    apt-get autoremove -y ;\
-    ln -s /usr/lib/${MARCH}-linux-gnu/libjemalloc.so.2 /usr/lib/libjemalloc.so.2; \
-    rm -rf /var/lib/apt/* /var/cache/apt/* \
-    rm -rf /root/.cargo \
-    rm -rf /root/.cache
+    && echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version 
+
+USER root
+
+RUN rm -rf /matrix/.cargo \
+    rm -rf /matrix/.cache
+
+FROM debian:bookworm-slim 
+
+# Maintainer
+LABEL maintainer="Andreas Peters <support@aventer.biz>"
+
+# install homerserver template
+COPY adds/start.sh /start.sh
+
+ENV COTURN_ENABLE=true
+ENV MATRIX_UID=991 MATRIX_GID=991
+
+RUN groupadd -r -g $MATRIX_GID matrix 
+RUN useradd -r -d /matrix -m -u $MATRIX_UID -g matrix matrix 
+
+RUN  mkdir /data \
+     mkdir /uploads 
+
+RUN apt-get update -y -q --fix-missing
+RUN apt-get upgrade -y 
+RUN apt-get install -y --no-install-recommends \
+        bash \
+        coturn \
+        sqlite3 \
+        zlib1g \
+        libjpeg62-turbo \
+        libssl3 \
+        libtool \
+        libxml2 \
+        libxslt1.1 \
+        libffi8 \
+        python3 \
+        python3-venv 
+
+RUN rm -rf /var/lib/apt/* /var/cache/apt/* 
+
+RUN chown -R $MATRIX_UID:$MATRIX_GID /data 
+RUN chown -R $MATRIX_UID:$MATRIX_GID /uploads
+
+COPY --from=builder /matrix /matrix
+COPY --from=builder /synapse.version /synapse.version
 
 USER matrix
+
+RUN python3 -m venv /matrix/venv
+RUN . /matrix/venv/bin/activate
+
+ENV PATH=/matrix/venv/bin:$PATH
+
+EXPOSE 8448
+
+ENTRYPOINT ["/start.sh"]
+CMD ["autostart"]
 
 #ENV LD_PRELOAD="/usr/lib/libjemalloc.so.2"
