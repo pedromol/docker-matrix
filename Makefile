@@ -35,7 +35,6 @@ build:
 
 push:
 	@echo ">>>> Publish docker image"
-	@docker buildx rm buildkit
 	@docker buildx create --use --name buildkit
 	docker buildx build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --platform linux/amd64,linux/arm64 --push -t ${IMAGEFULLNAME}:${BRANCH} .
 	docker buildx build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --platform linux/amd64,linux/arm64 --push -t ${IMAGEFULLNAME}:latest .
