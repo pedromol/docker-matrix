@@ -88,6 +88,10 @@ FROM debian:bookworm-slim
 
 # Maintainer
 LABEL maintainer="Andreas Peters <support@aventer.biz>"
+LABEL org.opencontainers.image.title="docker-matrix"
+LABEL org.opencontainers.image.description="The one fits all docker image for synapse (matrix) chat server."
+LABEL org.opencontainers.image.vendor="AVENTER UG (haftungsbeschränkt)"
+LABEL org.opencontainers.image.source="https://github.com/AVENTER-UG/docker-matrix"
 
 # install homerserver template
 COPY adds/start.sh /start.sh

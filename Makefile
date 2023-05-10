@@ -5,8 +5,8 @@ IMAGENAME=docker-matrix
 IMAGEFULLNAME=avhost/${IMAGENAME}
 BRANCH=${shell git symbolic-ref --short HEAD}
 LASTCOMMIT=$(shell git log -1 --pretty=short | tail -n 1 | tr -d " " | tr -d "UPDATE:")
-TAG_SYN=v1.82.0
-BV_SYN=release-v1.82
+TAG_SYN=v1.83.0
+BV_SYN=release-v1.83
 
 help:
 	    @echo "Makefile arguments:"
@@ -30,14 +30,17 @@ endif
 
 
 build:
-	@echo ">>>> Build docker image"
-	docker build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} -t ${IMAGEFULLNAME}:${BRANCH} .
+	@echo ">>>> Build docker image latest" 
+	docker build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} -t ${IMAGEFULLNAME}:latest .
 
 push:
-	@echo ">>>> Publish docker image"
+	@echo ">>>> Publish docker image: " ${BRANCH}
 	@docker buildx create --use --name buildkit
-	docker buildx build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --platform linux/amd64,linux/arm64 --push -t ${IMAGEFULLNAME}:${BRANCH} .
-	docker buildx build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --platform linux/amd64,linux/arm64 --push -t ${IMAGEFULLNAME}:latest .
+	@docker buildx --platform linux/amd64,linux/arm64 build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --platform linux/amd64,linux/arm64 --push -t ${IMAGEFULLNAME}:${BRANCH} .
+	@docker buildx --platform linux/amd64,linux/arm64 build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --platform linux/amd64,linux/arm64 --push -t ${IMAGEFULLNAME}:latest .
 	@docker buildx rm buildkit
 
-all: build push
+imagecheck:
+	trivy image ${IMAGEFULLNAME}:latest
+
+all: build imagecheck
