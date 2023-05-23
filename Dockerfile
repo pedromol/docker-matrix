@@ -98,6 +98,7 @@ COPY adds/start.sh /start.sh
 
 ENV COTURN_ENABLE=true
 ENV MATRIX_UID=991 MATRIX_GID=991
+ENV REPORT_STATS=no
 
 RUN groupadd -r -g $MATRIX_GID matrix 
 RUN useradd -r -d /matrix -m -u $MATRIX_UID -g matrix matrix 
