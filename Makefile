@@ -5,7 +5,7 @@ IMAGENAME=docker-matrix
 IMAGEFULLNAME=avhost/${IMAGENAME}
 BRANCH=${shell git symbolic-ref --short HEAD}
 LASTCOMMIT=$(shell git log -1 --pretty=short | tail -n 1 | tr -d " " | tr -d "UPDATE:")
-TAG_SYN=v1.84.0
+TAG_SYN=v1.84.1
 BV_SYN=release-v1.84
 
 help:
@@ -35,8 +35,11 @@ build:
 
 push:
 	@echo ">>>> Publish docker image: " ${BRANCH}
-	@docker buildx build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --push -t ${IMAGEFULLNAME}:${BRANCH} .
-	@docker buildx build --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --push -t ${IMAGEFULLNAME}:latest .
+	@docker buildx create --use --name buildkit
+	@docker buildx build --platform linux/amd64,linux/arm64,linux/ppc64le --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --push -t ${IMAGEFULLNAME}:${BRANCH} .
+	@docker buildx build --platform linux/amd64,linux/arm64,linux/ppc64le --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --push -t ${IMAGEFULLNAME}:latest .
+	@docker buildx rm buildkit
+
 
 imagecheck:
 	trivy image ${IMAGEFULLNAME}:latest

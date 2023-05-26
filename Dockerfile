@@ -2,9 +2,9 @@
 FROM debian:bookworm-slim as builder
 
 # Git branch to build from
-ARG BV_SYN=release-v1.80
+ARG BV_SYN=release-v1.84
 ARG BV_TUR=master
-ARG TAG_SYN=v1.80.0
+ARG TAG_SYN=v1.84.1
 
 # user configuration
 ENV MATRIX_UID=991 MATRIX_GID=991
