@@ -5,8 +5,8 @@ IMAGENAME=docker-matrix
 IMAGEFULLNAME=avhost/${IMAGENAME}
 BRANCH=${shell git symbolic-ref --short HEAD}
 LASTCOMMIT=$(shell git log -1 --pretty=short | tail -n 1 | tr -d " " | tr -d "UPDATE:")
-TAG_SYN=v1.84.1
-BV_SYN=release-v1.84
+TAG_SYN=v1.85.0
+BV_SYN=release-v1.85
 
 help:
 	    @echo "Makefile arguments:"
@@ -36,8 +36,8 @@ build:
 push:
 	@echo ">>>> Publish docker image: " ${BRANCH}
 	@docker buildx create --use --name buildkit
-	@docker buildx build --platform linux/amd64,linux/arm64,linux/ppc64le --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --push -t ${IMAGEFULLNAME}:${BRANCH} .
-	@docker buildx build --platform linux/amd64,linux/arm64,linux/ppc64le --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --push -t ${IMAGEFULLNAME}:latest .
+	@docker buildx build --platform linux/amd64,linux/arm64 --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --push -t ${IMAGEFULLNAME}:${BRANCH} .
+	@docker buildx build --platform linux/amd64,linux/arm64 --build-arg TAG_SYN=${TAG_SYN} --build-arg BV_SYN=${BV_SYN} --push -t ${IMAGEFULLNAME}:latest .
 	@docker buildx rm buildkit
 
 
