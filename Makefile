@@ -5,8 +5,8 @@ IMAGENAME=docker-matrix
 IMAGEFULLNAME=avhost/${IMAGENAME}
 BRANCH=${shell git symbolic-ref --short HEAD}
 LASTCOMMIT=$(shell git log -1 --pretty=short | tail -n 1 | tr -d " " | tr -d "UPDATE:")
-TAG_SYN=v1.87.0
-BV_SYN=release-v1.87
+TAG_SYN=v1.88.0
+BV_SYN=release-v1.88
 
 help:
 	    @echo "Makefile arguments:"
