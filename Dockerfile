@@ -2,9 +2,9 @@
 FROM debian:bookworm-slim as builder
 
 # Git branch to build from
-ARG BV_SYN=release-v1.95
+ARG BV_SYN=release-v1.98
 ARG BV_TUR=master
-ARG TAG_SYN=v1.95.1
+ARG TAG_SYN=v1.98.0
 
 # user configuration
 ENV MATRIX_UID=991 MATRIX_GID=991
@@ -120,7 +120,8 @@ RUN apt-get install -y --no-install-recommends \
         libxslt1.1 \
         libffi8 \
         python3 \
-        python3-venv 
+        python3-venv \
+        pwgen
 
 RUN rm -rf /var/lib/apt/* /var/cache/apt/* 
 
