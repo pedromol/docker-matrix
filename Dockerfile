@@ -2,9 +2,9 @@
 FROM debian:trixie-slim as builder
 
 # Git branch to build from
-ARG BV_SYN=release-v1.104
+ARG BV_SYN=release-v1.105
 ARG BV_TUR=master
-ARG TAG_SYN=v1.104.0
+ARG TAG_SYN=v1.105.0
 
 # user configuration
 ENV MATRIX_UID=991 MATRIX_GID=991
@@ -41,8 +41,7 @@ RUN apt-get install -y --no-install-recommends \
         python3 \
         python3-pip \
         python3-jinja2 \
-        python3-venv \
-        zlib1g 
+        python3-venv 
 
 RUN groupadd -r -g $MATRIX_GID matrix 
 RUN useradd -r -d /matrix -m -u $MATRIX_UID -g matrix matrix 
