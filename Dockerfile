@@ -2,9 +2,9 @@
 FROM debian:trixie-slim as builder
 
 # Git branch to build from
-ARG BV_SYN=release-v1.106
+ARG BV_SYN=release-v1.107
 ARG BV_TUR=master
-ARG TAG_SYN=v1.106.0
+ARG TAG_SYN=v1.107.0
 
 # user configuration
 ENV MATRIX_UID=991 MATRIX_GID=991
@@ -83,7 +83,7 @@ USER root
 RUN rm -rf /matrix/.cargo \
     rm -rf /matrix/.cache
 
-FROM debian:bookworm-slim 
+FROM debian:trixie-slim 
 
 # Maintainer
 LABEL maintainer="Andreas Peters <support@aventer.biz>"
@@ -113,7 +113,6 @@ RUN apt-get install -y --no-install-recommends \
         sqlite3 \
         zlib1g \
         libjpeg62-turbo \
-        libssl3 \
         libtool \
         libxml2 \
         libxslt1.1 \
