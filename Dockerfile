@@ -128,6 +128,7 @@ RUN chown -R $MATRIX_UID:$MATRIX_GID /uploads
 COPY --from=builder /matrix /matrix
 COPY --from=builder /synapse.version /synapse.version
 
+RUN chown -R $MATRIX_UID:$MATRIX_GID /matrix
 RUN chmod 777 /matrix
 RUN chmod 777 /synapse.version
 
