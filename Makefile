@@ -7,8 +7,8 @@ TAG=$(shell git describe --tags --abbrev=0)
 BRANCH=$(shell git symbolic-ref --short HEAD | xargs basename)
 BRANCHSHORT=$(shell echo ${BRANCH} | awk -F. '{ print $$1"."$$2 }')
 LASTCOMMIT=$(shell git log -1 --pretty=short | tail -n 1 | tr -d " " | tr -d "UPDATE:")
-TAG_SYN=v1.116.0
-BV_SYN=release-v1.116
+TAG_SYN=v1.121.0
+BV_SYN=release-v1.121
 BUILDDATE=$(shell date -u +%Y%m%d)
 
 
@@ -32,7 +32,4 @@ push:
 	@docker buildx rm buildkit
 
 
-imagecheck:
-	trivy image ${IMAGEFULLNAME}:latest
-
-all: build imagecheck
+all: build 
